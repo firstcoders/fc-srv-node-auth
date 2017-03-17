@@ -17,13 +17,15 @@ app.use(bodyParser.json());
 
 // use morgan to log requests to the console
 app.use(morgan('dev'));
+app.use(require('./middlewares/user'));
 
 // =======================
 // setup routes
 // =======================
-router.use('/login', require('./controllers/login'))
-router.use('/users', require('./controllers/user'))
-app.use(router)
+router.use('/login', require('./controllers/login'));
+router.use('/users', require('./controllers/user'));
+app.use(router);
+
 
 // =======================
 // start the server

@@ -1,11 +1,16 @@
 var express = require('express');
 var User    = require('../models/user');
 var router  = express.Router();
+var auth    = require('../middlewares/auth');
 
-router.get('/', function(req, res) {
+router.get('/', auth, function(req, res) {
     User.find({}, function(err, users) {
         res.json(users);
     });
+});
+
+router.post('/', auth, function(req, res) {
+    //validate input
 });
 
 // router.get('/setup', function(req, res) {

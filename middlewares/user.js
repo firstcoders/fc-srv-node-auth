@@ -1,18 +1,21 @@
-// User = require('../models/user')
+var User = require('../models/user');
+var jwt  = require('jsonwebtoken');
 
-// module.exports = function(req, res, next) {
-//   if (req.session && req.session.user) {
-//     User.get(req.session.user, function(err, user) {
-//       if (user) {
-//         req.user = user
-//       } else {
-//         delete req.user
-//         delete req.session.user
-//       }
+module.exports = function(req, res, next) {
+    var token = req.headers['authorization'].replace('Bearer', '').trim();
 
-//       next()
-//     })
-//   } else {
-//     next()
-//   }
-// }
+    if (token) {
+        jwt.verify(token, process.env.JWT_SECRET, function(err, decoded) {
+            if (err) {
+                next();
+            } else {
+                // if everything is good, save to request for use in other routes
+                req.decoded = decoded;
+                req.user = decoded;
+                next();
+            }
+        });
+    } else {
+        next();
+    }
+}

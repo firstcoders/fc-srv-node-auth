@@ -1,5 +1,6 @@
 {
   "name": "fc-srv-node-auth",
+  "author": "Mark Cremer",
   "main": "main.js",
   "private": true,
   "scripts": {
