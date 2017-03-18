@@ -1,10 +1,21 @@
-// get an instance of mongoose and mongoose.Schema
 var mongoose = require('mongoose');
-var Schema = mongoose.Schema;
 
-// set up a mongoose model and pass it using module.exports
-module.exports = mongoose.model('User', new Schema({
+var schema = new mongoose.Schema({
     username: String,
     password: String,
-    admin: Boolean
-}));
+    roles: [{
+        type: String
+    }]
+});
+
+schema.options.toJSON = {
+    transform: function(doc, ret, options) {
+        ret.id = ret._id;
+        delete ret._id;
+        delete ret.__v;
+        delete ret.password;
+        return ret;
+    }
+};
+
+module.exports = mongoose.model('User', schema);

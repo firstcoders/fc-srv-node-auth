@@ -26,6 +26,10 @@ router.use('/login', require('./controllers/login'));
 router.use('/users', require('./controllers/user'));
 app.use(router);
 
+app.get('/ping', function(req, res) {
+    res.json({success:true});
+});
+
 
 // =======================
 // start the server

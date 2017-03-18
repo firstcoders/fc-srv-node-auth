@@ -14,29 +14,33 @@ router.post('/', function(req, res) {
 
         if (!user) {
             res.status(400).json({
-                success: false,
                 message: 'Authentication failed. User not found.'
             });
         } else {
             if (user) {
-                bcrypt.compare(req.body.password, user.password, function(err, res2) {
-                    if (res2 !== true) {
-                        res.json({
-                            success: false,
-                            message: 'Authentication failed. Wrong password.'
-                        });
-                    } else {
-                        var token = jwt.sign(user, process.env.JWT_SECRET, {
-                            expiresIn: 60*60*24
-                        });
+                bcrypt
+                    .compare(req.body.password, user.password)
+                    .then(function(isValid) {
+                        if (isValid !== true) {
+                            res.status(400).json({
+                                message: 'Authentication failed. Wrong password.'
+                            });
+                        } else {
+                            var json = user.toJSON({ virtuals: true });
 
-                        res.json({
-                            success: true,
-                            message: 'Enjoy your token!',
-                            token: token
-                        });
-                    }
-                });
+                            var token = jwt.sign(json, process.env.JWT_SECRET, {
+                                expiresIn: 60*60*24
+                            });
+
+                            res.json({
+                                token: token
+                            });
+                        }
+                    })
+                    .catch(function(error) {
+                        console.log(error);
+                    })
+                ;
             }
         }
     });
