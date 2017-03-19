@@ -1,49 +1,50 @@
-var express = require('express');
-var bcrypt  = require('bcryptjs');
-var jwt     = require('jsonwebtoken');
-var User    = require('../models/user');
-var router  = express.Router();
+'use strict'
 
-router.post('/', function(req, res) {
-    User.findOne({
-        username: req.body.username
-    }, function(err, user) {
-        if (err) {
-            throw err;
-        }
+var express = require('express')
+var bcrypt = require('bcryptjs')
+var jwt = require('jsonwebtoken')
+var User = require('../models/user')
+var router = express.Router()
 
-        if (!user) {
-            res.status(400).json({
-                message: 'Authentication failed. User not found.'
-            });
-        } else {
-            if (user) {
-                bcrypt
-                    .compare(req.body.password, user.password)
-                    .then(function(isValid) {
-                        if (isValid !== true) {
-                            res.status(400).json({
-                                message: 'Authentication failed. Wrong password.'
-                            });
-                        } else {
-                            var json = user.toJSON({ virtuals: true });
+router.post('/', function (req, res) {
+  User.findOne({
+    username: req.body.username
+  }, function (err, user) {
+    if (err) {
+      throw err
+    }
 
-                            var token = jwt.sign(json, process.env.JWT_SECRET, {
-                                expiresIn: 60*60*24
-                            });
+    if (!user) {
+      res.status(400).json({
+        message: 'Authentication failed. User not found.'
+      })
+    } else {
+      if (user) {
+        bcrypt
+          .compare(req.body.password, user.password)
+          .then(function (isValid) {
+            if (isValid !== true) {
+              res.status(400).json({
+                message: 'Authentication failed. Wrong password.'
+              })
+            } else {
+              var json = user.toJSON({ virtuals: true })
 
-                            res.json({
-                                token: token
-                            });
-                        }
-                    })
-                    .catch(function(error) {
-                        console.log(error);
-                    })
-                ;
+              var token = jwt.sign(json, process.env.JWT_SECRET, {
+                expiresIn: 60 * 60 * 24
+              })
+
+              res.json({
+                token: token
+              })
             }
-        }
-    });
-});
+          })
+          .catch(function (error) {
+            console.log(error)
+          })
+      }
+    }
+  })
+})
 
-module.exports = router;
+module.exports = router
