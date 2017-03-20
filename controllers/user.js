@@ -21,27 +21,23 @@ router.get('/:id', auth, function (req, res) {
 // })
 
 router.get('/setup', function (req, res) {
-  var bcrypt = require('bcryptjs')
+  var encoder = require('../helpers/encoder')()
 
-  bcrypt.genSalt(10, function (err, salt) {
+  encoder.encode('password').then(function (err, hash) {
     if (err) throw err
 
-    bcrypt.hash('password', salt, function (err, hash) {
+    var user = new User({
+      username: 'mark@firstcoders.co.uk',
+      password: hash,
+      roles: ['ROLE_ADMIN']
+    })
+
+    // save the sample user
+    user.save(function (err) {
       if (err) throw err
 
-      var user = new User({
-        username: 'mark@firstcoders.co.uk',
-        password: hash,
-        roles: ['ROLE_ADMIN']
-      })
-
-      // save the sample user
-      user.save(function (err) {
-        if (err) throw err
-
-        console.log('User saved successfully')
-        res.json({ success: true })
-      })
+      console.log('User saved successfully')
+      res.json({ success: true })
     })
   })
 })

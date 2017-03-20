@@ -5,7 +5,13 @@ var schema = new mongoose.Schema({
   password: String,
   roles: [{
     type: String
-  }]
+  }],
+  email: String,
+  resetToken: String,
+  isActive: Boolean,
+  createdDate: Date,
+  modifiedDate: Date,
+  failedLoginAttempts: Number
 })
 
 schema.options.toJSON = {
