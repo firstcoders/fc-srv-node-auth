@@ -22,16 +22,16 @@ app.use(require('./middlewares/user'))
 // =======================
 // setup routes
 // =======================
-router.use('/login', require('./controllers/login'))
-router.use('/users', require('./controllers/user'))
+router.use('/ping', require('./routes/ping'))
+router.use('/login', require('./routes/login'))
+router.use('/users', require('./routes/user'))
 app.use(router)
-
-app.get('/ping', function (req, res) {
-  res.json({ success: true })
-})
 
 // =======================
 // start the server
 // =======================
 app.listen(process.env.PORT)
 console.log('Magic happens at http://localhost:' + process.env.PORT)
+
+// for testing
+module.exports = app

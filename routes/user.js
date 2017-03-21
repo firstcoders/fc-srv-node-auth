@@ -17,38 +17,31 @@ router.get('/:id', auth, function (req, res) {
   })
 })
 
-//create a new user
+// create a new user
 router.post('/', auth, function (req, res) {
 })
 
-//edit a user
+// edit a user
 router.put('/:id', auth, function (req, res) {
 })
 
-//delete a user
+// delete a user
 router.delete('/:id', auth, function (req, res) {
 })
 
-// router.get('/setup', function (req, res) {
-//   var encoder = require('../helpers/encoder')()
+// tmp
+router.get('/setup', function (req, res) {
+  var user = new User({
+    username: 'mark@firstcoders.co.uk',
+    password: 'password',
+    roles: ['ROLE_ADMIN']
+  })
 
-//   encoder.encode('password').then(function (err, hash) {
-//     if (err) throw err
-
-//     var user = new User({
-//       username: 'mark@firstcoders.co.uk',
-//       password: hash,
-//       roles: ['ROLE_ADMIN']
-//     })
-
-//     // save the sample user
-//     user.save(function (err) {
-//       if (err) throw err
-
-//       console.log('User saved successfully')
-//       res.json({ success: true })
-//     })
-//   })
-// })
+  // save the sample user
+  user.save(function (err) {
+    if (err) throw err
+    res.json({ success: true })
+  })
+})
 
 module.exports = router

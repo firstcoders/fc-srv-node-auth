@@ -11,7 +11,7 @@ router.post('/', function (req, res) {
     if (err) throw err
 
     if (!user) {
-      //@todo log
+      // @todo log
 
       res.status(400).json({
         message: 'Authentication failed. Your email and password do not match our records'
@@ -21,13 +21,13 @@ router.post('/', function (req, res) {
         .compare(req.body.password, user.password)
         .then(function (isValid) {
           if (isValid !== true) {
-            //@todo log
+            // @todo log
 
             res.status(400).json({
               message: 'Authentication failed. Your email and password do not match our records'
             })
           } else {
-            //@todo log
+            // @todo log
 
             var json = user.toJSON({ virtuals: true })
 
