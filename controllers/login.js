@@ -11,22 +11,28 @@ router.post('/', function (req, res) {
     if (err) throw err
 
     if (!user) {
+      //@todo log
+
       res.status(400).json({
-        message: 'Authentication failed. User not found.'
+        message: 'Authentication failed. Your email and password do not match our records'
       })
     } else {
       encoder
         .compare(req.body.password, user.password)
         .then(function (isValid) {
           if (isValid !== true) {
+            //@todo log
+
             res.status(400).json({
-              message: 'Authentication failed. Wrong password.'
+              message: 'Authentication failed. Your email and password do not match our records'
             })
           } else {
+            //@todo log
+
             var json = user.toJSON({ virtuals: true })
 
             var token = jwt.sign(json, process.env.JWT_SECRET, {
-              expiresIn: 60 * 60 * 24
+              expiresIn: process.env.JWT_EXPIRES_IN || 60 * 60 * 24
             })
 
             res.json({
