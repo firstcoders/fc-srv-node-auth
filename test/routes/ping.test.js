@@ -1,11 +1,11 @@
 var chai = require('chai');
 var chaiHttp = require('chai-http');
-var app = require('../main');
+var app = require('../../main');
 var expect = require('chai').expect;
 
 chai.use(chaiHttp);
 
-describe('/GET ping', () => {
+describe('Ping', () => {
     it('it respond with some json indicating the service is live', (done) => {
         chai.request(app)
             .get('/ping')

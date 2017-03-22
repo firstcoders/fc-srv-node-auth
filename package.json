@@ -6,7 +6,7 @@
   "scripts": {
     "start": "node main.js",
     "pretest": "npm run lint",
-    "test": "node ./node_modules/mocha/bin/mocha test",
+    "test": "node ./node_modules/mocha/bin/mocha test --recursive",
     "lint": "standard",
     "postlint": "npm run lint-md",
     "lint-md": "standard-markdown"

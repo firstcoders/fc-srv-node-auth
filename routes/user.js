@@ -4,16 +4,22 @@ var auth = require('../middlewares/auth')
 var router = express.Router()
 
 router.get('/', auth, function (req, res) {
+  // @todo paginate
+  // @todo search
   User.find({}, function (err, users) {
     if (err) throw err
-    res.json(users)
+    res.json({
+      data: users
+    })
   })
 })
 
-router.get('/:id', auth, function (req, res) {
-  User.findOne({ _id: req.params.id }, function (err, user) {
+router.get('/:username', auth, function (req, res) {
+  User.findOne({ username: req.params.username }, function (err, user) {
     if (err) throw err
-    res.json(user)
+    res.json({
+      data: user
+    })
   })
 })
 
