@@ -8,10 +8,21 @@ var router = express.Router()
 // =======================
 router.get('/', auth, function (req, res, next) {
   // @todo search
-  User.paginate({}, { offset: 0, limit: 20 }, function (err, users) {
+  // @see https://developer.github.com/v3/
+  User.paginate({}, { offset: req.params.offset || 0, limit: 20 }, function (err, results) {
     if (err) return next(err)
 
-    res.json(users)
+    var links = {}
+
+    links.self = 'users?offset=' + results.offset
+    links.prev = '/users?offset=20'
+    links.next = '/users?offset=20'
+    links.last = '/users?offset=20'
+    links.first = '/users?offset=20'
+
+    res
+      .links(links)
+      .json(results)
   })
 })
 
@@ -37,7 +48,7 @@ router.post('/', auth, function (req, res, next) {
 
     res
       .status(201)
-      .header('Location', req.protocol + '://' + req.get('host') + '/users/' + encodeURIComponent(req.body.username))
+      .location(req.protocol + '://' + req.get('host') + '/users/' + encodeURIComponent(req.body.username))
       .send()
   })
 })

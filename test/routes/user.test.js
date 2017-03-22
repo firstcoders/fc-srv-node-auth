@@ -11,15 +11,17 @@ function setUserFixtures (users) {
   mongoose.models.User.find = (params, callback) => {
     callback(null, users)
   }
-
-  mongoose.models.User.paginate = (params, options, callback) => {
-    callback(null, users)
-  }
 }
 
 describe('Get users', () => {
+  beforeEach(function (done) {
+    mongoose.models.User.paginate = (params, options, callback) => {
+      callback(null, {'docs': [{'username': 'mark@firstcoders.co.uk', 'roles': ['ROLE_ADMIN'], 'id': '58cd112803e6c9000f5878ca'}], 'total': 1, 'limit': 20, 'offset': 0})
+    }
+    done()
+  })
+
   it('it should respond with a 401 if the user is unauthorized', (done) => {
-    setUserFixtures([mockUsers.edmund, mockUsers.baldrick])
     chai.request(app)
     .get('/users')
     .end(function (err, res) {
@@ -31,14 +33,13 @@ describe('Get users', () => {
   })
 
   it('it should respond with serialized users when logged in', (done) => {
-    setUserFixtures([mockUsers.edmund, mockUsers.baldrick])
     chai.request(app)
     .get('/users')
     .set('X-AUTH-IDENTITY', '{ id: 1 }')
     .end(function (err, res) {
       expect(err).to.be.null
       expect(res).to.have.status(200)
-      expect(res.body).to.be.instanceof(Array)
+      expect(res.body).to.be.instanceof(Object)
       done()
     })
   })
