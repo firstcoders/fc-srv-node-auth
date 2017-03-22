@@ -49,11 +49,11 @@ router.post('/', auth, function (req, res, next) {
 // =======================
 // Edit a user
 // =======================
-router.put('/:username', auth, function (req, res) {
+router.put('/:username', auth, function (req, res, next) {
   User.findOneAndUpdate(
     { username: req.params.username },
     req.body,
-    { upsert:true },
+    { upsert: true },
     function (err, user) {
       if (err) return next(err)
 

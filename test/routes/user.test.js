@@ -90,7 +90,7 @@ describe('Create user', () => {
     .post('/users')
     .set('X-AUTH-IDENTITY', '{ id: 1, username: \'\' }')
     .send({
-      //no username
+      // no username
       password: 'lookatmymachinery!'
     })
     .end(function (err, res) {
@@ -102,9 +102,9 @@ describe('Create user', () => {
   })
 
   it('it should respond with a 201 and the resource location if the user was created', (done) => {
-    mongoose.Collection.prototype.insert = function(docs, options, callback) {
-      callback(null, docs);
-    };
+    mongoose.Collection.prototype.insert = function (docs, options, callback) {
+      callback(null, docs)
+    }
 
     chai.request(app)
     .post('/users')

@@ -19,7 +19,6 @@ app.use(bodyParser.json())
 app.use(morgan('dev'))
 app.use(require('./middlewares/user'))
 
-
 // =======================
 // setup routes
 // =======================
