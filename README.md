@@ -1,6 +1,6 @@
 # Nodejs express identity server.
 
-## NOTE: This is currently still under development.
+> NOTE: This is currently still under development.
 
 The goal is to have a nodejs application that can generate a jwt token.
 In addition some routes will be protected via an authentication layer,
