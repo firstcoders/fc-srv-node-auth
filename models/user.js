@@ -40,7 +40,7 @@ schema.pre('save', function (next) {
     })
   }
 
-  this.modifiedDate = new Date();
+  this.modifiedDate = new Date()
 
   return next()
 })

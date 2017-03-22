@@ -30,5 +30,17 @@
     "mocha": "^3.2.0",
     "standard": "8.4.0",
     "standard-markdown": "2.2.0"
+  },
+  "standard": {
+    "globals": [
+      "describe",
+      "context",
+      "before",
+      "beforeEach",
+      "after",
+      "afterEach",
+      "it",
+      "expect"
+    ]
   }
 }
