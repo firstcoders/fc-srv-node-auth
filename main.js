@@ -19,6 +19,7 @@ app.use(bodyParser.json())
 app.use(morgan('dev'))
 app.use(require('./middlewares/user'))
 
+
 // =======================
 // setup routes
 // =======================
@@ -26,6 +27,8 @@ router.use('/ping', require('./routes/ping'))
 router.use('/login', require('./routes/login'))
 router.use('/users', require('./routes/user'))
 app.use(router)
+
+app.use(require('./middlewares/clientErrorHandler'))
 
 // =======================
 // start the server

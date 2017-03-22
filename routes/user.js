@@ -3,6 +3,9 @@ var User = require('../models/user')
 var auth = require('../middlewares/auth')
 var router = express.Router()
 
+// =======================
+// Get a users
+// =======================
 router.get('/', auth, function (req, res) {
   // @todo paginate
   // @todo search
@@ -14,40 +17,57 @@ router.get('/', auth, function (req, res) {
   })
 })
 
-router.get('/:username', auth, function (req, res) {
+// =======================
+// Get a single user
+// =======================
+router.get('/:username', auth, function (req, res, next) {
   User.findOne({ username: req.params.username }, function (err, user) {
-    if (err) throw err
+    if (err) return next(err)
+
     res.json({
       data: user
     })
   })
 })
 
-// create a new user
-router.post('/', auth, function (req, res) {
-})
+// =======================
+// Create a user
+// =======================
+router.post('/', auth, function (req, res, next) {
+  var user = new User(req.body)
 
-// edit a user
-router.put('/:id', auth, function (req, res) {
-})
-
-// delete a user
-router.delete('/:id', auth, function (req, res) {
-})
-
-// tmp
-router.get('/setup', function (req, res) {
-  var user = new User({
-    username: 'mark@firstcoders.co.uk',
-    password: 'password',
-    roles: ['ROLE_ADMIN']
-  })
-
-  // save the sample user
   user.save(function (err) {
-    if (err) throw err
-    res.json({ success: true })
+    if (err) return next(err)
+
+    res
+      .status(201)
+      .header('Location', req.protocol + '://' + req.get('host') + '/users/' + encodeURIComponent(req.body.username))
+      .send()
   })
+})
+
+// =======================
+// Edit a user
+// =======================
+router.put('/:username', auth, function (req, res) {
+  User.findOneAndUpdate(
+    { username: req.params.username },
+    req.body,
+    { upsert:true },
+    function (err, user) {
+      if (err) return next(err)
+
+      res
+        .status(204)
+        .send()
+    }
+  )
+})
+
+// =======================
+// Delete a user
+// =======================
+router.delete('/:id', auth, function (req, res) {
 })
 
 module.exports = router

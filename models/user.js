@@ -4,7 +4,10 @@ var encoder = require('../helpers/encoder')()
 var schema = new mongoose.Schema({
   username: {
     type: String,
-    required: true
+    required: true,
+    index: {
+      unique: true
+    }
   },
   password: {
     type: String,
@@ -16,9 +19,9 @@ var schema = new mongoose.Schema({
   email: String,
   resetToken: String,
   isActive: Boolean,
-  createdDate: Date,
-  modifiedDate: Date,
   failedLoginAttempts: Number
+}, {
+  timestamps: true
 })
 
 schema.options.toJSON = {
@@ -39,8 +42,6 @@ schema.pre('save', function (next) {
       user.password = hash
     })
   }
-
-  this.modifiedDate = new Date()
 
   return next()
 })
