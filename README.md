@@ -8,7 +8,8 @@ but instead of node decoding the jwt token this is done via a nginx reverse
 proxy.
 
 ## Installation
-- Create a .env file containing the following environment variables:
+
+### Create a .env file containing the following environment variables:
 - PORT=8080
 - DATABASE=mongodb://connectionstring
 - JWT_SECRET=yourveryownsecret
