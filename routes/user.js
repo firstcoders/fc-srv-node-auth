@@ -11,9 +11,8 @@ router.get('/', auth, function (req, res) {
   // @todo search
   User.find({}, function (err, users) {
     if (err) throw err
-    res.json({
-      data: users
-    })
+
+    res.json(users)
   })
 })
 
@@ -24,9 +23,7 @@ router.get('/:username', auth, function (req, res, next) {
   User.findOne({ username: req.params.username }, function (err, user) {
     if (err) return next(err)
 
-    res.json({
-      data: user
-    })
+    res.json(user)
   })
 })
 
@@ -67,7 +64,7 @@ router.put('/:username', auth, function (req, res, next) {
 // =======================
 // Delete a user
 // =======================
-router.delete('/:id', auth, function (req, res) {
+router.delete('/:username', auth, function (req, res) {
 })
 
 module.exports = router

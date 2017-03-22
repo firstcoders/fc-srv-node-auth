@@ -13,7 +13,7 @@ function mockUser (user) {
   }
 }
 
-describe('Login', () => {
+describe('Login using username and password', () => {
   beforeEach(function (done) {
     mockUser(mockUsers.edmund)
     done()
@@ -21,7 +21,7 @@ describe('Login', () => {
 
   it('Should respond with a 400 and an error message if the user is not found', (done) => {
     chai.request(app)
-    .post('/login')
+    .post('/tokens')
     .send({ username: 'queenie@home.nl', password: 'thisisthewrongpassword' })
     .end(function (err, res) {
       expect(err).not.to.be.null
@@ -33,7 +33,7 @@ describe('Login', () => {
 
   it('Should respond with a 400 and an error message if the wrong password is submitted', (done) => {
     chai.request(app)
-    .post('/login')
+    .post('/tokens')
     .send({ username: 'edmundblackadder@home.nl', password: 'thisisthewrongpassword' })
     .end(function (err, res) {
       expect(err).not.to.be.null
@@ -45,7 +45,7 @@ describe('Login', () => {
 
   it('Should respond wth an encoded jwt token', (done) => {
     chai.request(app)
-    .post('/login')
+    .post('/tokens')
     .send({ username: 'edmundblackadder@home.nl', password: 'password' })
     .end(function (err, res) {
       expect(err).to.be.null

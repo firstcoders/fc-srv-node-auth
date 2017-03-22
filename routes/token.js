@@ -1,7 +1,7 @@
 var express = require('express')
 var jwt = require('jsonwebtoken')
 var User = require('../models/user')
-var encoder = require('../helpers/encoder')()
+var encoder = require('../helpers/encoder')
 var router = express.Router()
 
 router.post('/', function (req, res) {
@@ -13,9 +13,11 @@ router.post('/', function (req, res) {
     if (!user) {
       // @todo log
 
-      res.status(400).json({
-        message: 'Authentication failed. Your email and password do not match our records'
-      })
+      res
+        .status(400)
+        .json({
+          message: 'Authentication failed. Your email and password do not match our records'
+        })
     } else {
       encoder
         .compare(req.body.password, user.password)
@@ -23,9 +25,11 @@ router.post('/', function (req, res) {
           if (isValid !== true) {
             // @todo log
 
-            res.status(400).json({
-              message: 'Authentication failed. Your email and password do not match our records'
-            })
+            res
+              .status(400)
+              .json({
+                message: 'Authentication failed. Your email and password do not match our records'
+              })
           } else {
             // @todo log
 

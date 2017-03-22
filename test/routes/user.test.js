@@ -21,7 +21,7 @@ describe('Get users', () => {
     .end(function (err, res) {
       expect(err).not.to.be.null
       expect(res).to.have.status(401)
-      expect(res.body).not.to.have.ownProperty('data')
+      // expect(res.body).to.be.null
       done()
     })
   })
@@ -34,8 +34,7 @@ describe('Get users', () => {
     .end(function (err, res) {
       expect(err).to.be.null
       expect(res).to.have.status(200)
-      expect(res.body).to.have.ownProperty('data')
-      expect(res.body.data).to.be.instanceof(Array)
+      expect(res.body).to.be.instanceof(Array)
       done()
     })
   })
@@ -49,7 +48,7 @@ describe('Get single user', () => {
     .end(function (err, res) {
       expect(err).not.to.be.null
       expect(res).to.have.status(401)
-      expect(res.body).not.to.have.ownProperty('data')
+      // expect(res.body).to.be.null
       done()
     })
   })
@@ -62,8 +61,7 @@ describe('Get single user', () => {
     .end(function (err, res) {
       expect(err).to.be.null
       expect(res).to.have.status(200)
-      expect(res.body).to.have.ownProperty('data')
-      expect(res.body.data).to.be.instanceof(Object)
+      expect(res.body).to.be.instanceof(Object)
       done()
     })
   })

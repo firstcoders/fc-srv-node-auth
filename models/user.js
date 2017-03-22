@@ -1,5 +1,5 @@
 var mongoose = require('mongoose')
-var encoder = require('../helpers/encoder')()
+var encoder = require('../helpers/encoder')
 
 var schema = new mongoose.Schema({
   username: {
