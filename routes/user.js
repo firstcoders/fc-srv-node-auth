@@ -6,11 +6,10 @@ var router = express.Router()
 // =======================
 // Get a users
 // =======================
-router.get('/', auth, function (req, res) {
-  // @todo paginate
+router.get('/', auth, function (req, res, next) {
   // @todo search
-  User.find({}, function (err, users) {
-    if (err) throw err
+  User.paginate({}, { offset: 0, limit: 20 }, function (err, users) {
+    if (err) return next(err)
 
     res.json(users)
   })

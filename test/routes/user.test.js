@@ -11,6 +11,10 @@ function setUserFixtures (users) {
   mongoose.models.User.find = (params, callback) => {
     callback(null, users)
   }
+
+  mongoose.models.User.paginate = (params, options, callback) => {
+    callback(null, users)
+  }
 }
 
 describe('Get users', () => {

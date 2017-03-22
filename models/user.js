@@ -1,4 +1,5 @@
 var mongoose = require('mongoose')
+var paginate = require('mongoose-paginate')
 var encoder = require('../helpers/encoder')
 
 var schema = new mongoose.Schema({
@@ -45,5 +46,7 @@ schema.pre('save', function (next) {
 
   return next()
 })
+
+schema.plugin(paginate)
 
 module.exports = mongoose.model('User', schema)
