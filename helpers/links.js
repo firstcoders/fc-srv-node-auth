@@ -1,11 +1,11 @@
-module.exports = function(result) {
-    var links = {}
+module.exports = function (result) {
+  var links = {}
 
-    links.self = 'users?offset=' + result.offset
-    links.prev = '/users?offset=20'
-    links.next = '/users?offset=20'
-    links.last = '/users?offset=20'
-    links.first = '/users?offset=20'
+  links.self = 'users?offset=' + result.offset
+  links.prev = '/users?offset=20'
+  links.next = '/users?offset=20'
+  links.last = '/users?offset=20'
+  links.first = '/users?offset=20'
 
-    return links;
+  return links
 }

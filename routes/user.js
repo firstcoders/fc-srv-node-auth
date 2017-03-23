@@ -19,13 +19,9 @@ router.get('/', auth, function (req, res, next) {
       .header('X-total-count', result.total)
 
     if (req.accepts(['application/json', 'application/vnd.firstcoders.v1+json'])) {
-        res.json(result)
-        return next()
+      res.json(result)
+      return next()
     }
-
-    // res
-    //   .type('txt')
-    //   .send('Not found')
 
     next()
   })
