@@ -9,13 +9,13 @@ var router = express.Router()
 // =======================
 router.get('/', auth, function (req, res, next) {
   var params = {}
-  var options = { offset: req.params.offset || 0, limit: 20 }
+  var options = { offset: req.params.offset || 0, limit: req.params.limit || 20 }
 
   User.paginate(params, options, function (err, result) {
     if (err) return next(err)
 
     res
-      .links(links(result))
+      .links(links(req, result))
       .header('X-total-count', result.total)
 
     if (req.accepts(['application/json', 'application/vnd.firstcoders.v1+json'])) {
