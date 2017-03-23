@@ -1,28 +1,25 @@
 var express = require('express')
 var User = require('../models/user')
 var auth = require('../middlewares/auth')
+var links = require('../helpers/links')
 var router = express.Router()
 
 // =======================
 // Get a users
 // =======================
 router.get('/', auth, function (req, res, next) {
-  // @todo search
-  // @see https://developer.github.com/v3/
-  User.paginate({}, { offset: req.params.offset || 0, limit: 20 }, function (err, results) {
+  var params = {}
+  var options = { offset: req.params.offset || 0, limit: 20 }
+
+  User.paginate(params, options, function (err, result) {
     if (err) return next(err)
 
-    var links = {}
-
-    links.self = 'users?offset=' + results.offset
-    links.prev = '/users?offset=20'
-    links.next = '/users?offset=20'
-    links.last = '/users?offset=20'
-    links.first = '/users?offset=20'
-
     res
-      .links(links)
-      .json(results)
+      .links(links(result))
+      .header('X-total-count', result.total)
+      .json(result)
+
+    next()
   })
 })
 

@@ -40,6 +40,9 @@ describe('Get users', () => {
       expect(err).to.be.null
       expect(res).to.have.status(200)
       expect(res.body).to.be.instanceof(Object)
+      expect(res.headers.link).not.to.be.undefined
+      expect(res.headers.link).not.to.be.undefined
+      expect(res.headers['x-total-count']).not.to.be.undefined
       done()
     })
   })
