@@ -10,7 +10,7 @@ router.post('/', function (req, res, next) {
   }, function (err, user) {
     if (err) return next(err)
 
-    function sendBadRequestResponse() {
+    function sendBadRequestResponse () {
       // @todo log
       res.status(400)
       if (req.accepts(['application/json', 'application/vnd.firstcoders.v1+json'])) {
