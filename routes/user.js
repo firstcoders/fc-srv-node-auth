@@ -17,7 +17,15 @@ router.get('/', auth, function (req, res, next) {
     res
       .links(links(result))
       .header('X-total-count', result.total)
-      .json(result)
+
+    if (req.accepts(['application/json', 'application/vnd.firstcoders.v1+json'])) {
+        res.json(result)
+        return next()
+    }
+
+    // res
+    //   .type('txt')
+    //   .send('Not found')
 
     next()
   })
@@ -30,7 +38,11 @@ router.get('/:username', auth, function (req, res, next) {
   User.findOne({ username: req.params.username }, function (err, user) {
     if (err) return next(err)
 
-    res.json(user)
+    if (req.accepts(['application/json', 'application/vnd.firstcoders.v1+json'])) {
+      res.json(user)
+    }
+
+    next()
   })
 })
 

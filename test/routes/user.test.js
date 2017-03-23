@@ -35,6 +35,7 @@ describe('Get users', () => {
   it('it should respond with serialized users when logged in', (done) => {
     chai.request(app)
     .get('/users')
+    .set('Accept', 'application/json')
     .set('X-AUTH-IDENTITY', '{ id: 1 }')
     .end(function (err, res) {
       expect(err).to.be.null
@@ -43,6 +44,18 @@ describe('Get users', () => {
       expect(res.headers.link).not.to.be.undefined
       expect(res.headers.link).not.to.be.undefined
       expect(res.headers['x-total-count']).not.to.be.undefined
+      done()
+    })
+  })
+
+  it('it should respond with a 404 when requesting with an unsupported accept header', (done) => {
+    chai.request(app)
+    .get('/users')
+    .set('Accept', 'unsopported')
+    .set('X-AUTH-IDENTITY', '{ id: 1 }')
+    .end(function (err, res) {
+      expect(err).not.to.be.null
+      expect(res).to.have.status(404)
       done()
     })
   })
@@ -70,6 +83,19 @@ describe('Get single user', () => {
       expect(err).to.be.null
       expect(res).to.have.status(200)
       expect(res.body).to.be.instanceof(Object)
+      done()
+    })
+  })
+
+  it('it should respond with a 404 when requesting with an unsupported accept header', (done) => {
+    setUserFixtures([mockUsers.edmund, mockUsers.baldrick])
+    chai.request(app)
+    .get('/users/edmundblackadder@home.nl')
+    .set('X-AUTH-IDENTITY', '{ id: 1 }')
+    .set('Accept', 'unsopported')
+    .end(function (err, res) {
+      expect(err).not.to.be.null
+      expect(res).to.have.status(404)
       done()
     })
   })
