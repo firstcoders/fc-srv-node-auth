@@ -30,7 +30,9 @@ schema.options.toJSON = {
     ret.id = ret._id
     delete ret._id
     delete ret.__v
+    delete ret.username
     delete ret.password
+    delete ret.resetToken
     return ret
   }
 }

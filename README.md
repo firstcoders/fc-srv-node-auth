@@ -16,3 +16,11 @@ proxy.
 
 ## Test
 - npm run test
+
+# Todo
+- return cors headers
+- input validation
+- reset password + email
+- refresh token
+- logging
+- i18n

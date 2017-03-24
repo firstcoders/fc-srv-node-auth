@@ -5,10 +5,12 @@ var links = require('../helpers/links')
 var router = express.Router()
 
 // =======================
-// Get a users
+// Get users
 // =======================
 router.get('/', auth, function (req, res, next) {
+  // @todo handle and validate search params
   var params = {}
+  // @todo validate input
   var options = { offset: req.params.offset || 0, limit: req.params.limit || 20 }
 
   User.paginate(params, options, function (err, result) {
@@ -30,8 +32,8 @@ router.get('/', auth, function (req, res, next) {
 // =======================
 // Get a single user
 // =======================
-router.get('/:username', auth, function (req, res, next) {
-  User.findOne({ username: req.params.username }, function (err, user) {
+router.get('/:id', auth, function (req, res, next) {
+  User.findOne({ _id: req.params.id }, function (err, user) {
     if (err) return next(err)
 
     if (req.accepts(['application/json', 'application/vnd.firstcoders.v1+json'])) {
@@ -80,6 +82,7 @@ router.put('/:username', auth, function (req, res, next) {
 // Delete a user
 // =======================
 router.delete('/:username', auth, function (req, res) {
+  // @todo
 })
 
 module.exports = router

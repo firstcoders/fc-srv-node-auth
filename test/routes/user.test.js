@@ -65,7 +65,7 @@ describe('Get single user', () => {
   it('it should respond with a 401 if the user is unauthorized', (done) => {
     setUserFixtures([mockUsers.edmund, mockUsers.baldrick])
     chai.request(app)
-    .get('/users/edmundblackadder@home.nl')
+    .get('/users/' + mockUsers.edmund._id)
     .end(function (err, res) {
       expect(err).not.to.be.null
       expect(res).to.have.status(401)
@@ -77,7 +77,7 @@ describe('Get single user', () => {
   it('it should respond with serialized users when logged in', (done) => {
     setUserFixtures([mockUsers.edmund, mockUsers.baldrick])
     chai.request(app)
-    .get('/users/edmundblackadder@home.nl')
+    .get('/users/' + mockUsers.edmund._id)
     .set('X-AUTH-IDENTITY', '{ id: 1 }')
     .end(function (err, res) {
       expect(err).to.be.null

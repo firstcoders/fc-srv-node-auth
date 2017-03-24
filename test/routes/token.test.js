@@ -50,7 +50,7 @@ describe('Login using username and password', () => {
     .end(function (err, res) {
       expect(err).to.be.null
       expect(res).to.have.status(200)
-      expect(res.body).to.have.ownProperty('token')
+      expect(res.body).to.have.ownProperty('accessToken')
       done()
     })
   })

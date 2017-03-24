@@ -30,13 +30,19 @@ router.post('/', function (req, res, next) {
             // @todo log
 
             var json = user.toJSON({ virtuals: true })
+            var expiresIn = process.env.JWT_EXPIRES_IN || 60 * 60 * 24
 
             var token = jwt.sign(json, process.env.JWT_SECRET, {
-              expiresIn: process.env.JWT_EXPIRES_IN || 60 * 60 * 24
+              expiresIn: expiresIn
             })
 
             if (req.accepts(['application/json', 'application/vnd.firstcoders.v1+json'])) {
-              res.json({ token: token })
+              res.json({
+                accessToken: token,
+                tokenType: 'Bearer',
+                expiresIn: expiresIn,
+                refreshToken: 'abc'
+              })
             } else if (req.accepts('text/html')) {
               res.send(token)
             }
