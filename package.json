@@ -16,6 +16,7 @@
     "url": "git://github.com/firstcoders/srv-node-auth.git"
   },
   "dependencies": {
+    "asynch": "^0.5.2",
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.17.1",
     "dotenv": "^4.0.0",

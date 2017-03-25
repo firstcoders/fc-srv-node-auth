@@ -43,10 +43,11 @@ schema.pre('save', function (next) {
   if (user.isModified('password')) {
     encoder.encode(user.password).then(function (hash) {
       user.password = hash
+      return next()
     })
+  } else {
+    return next()
   }
-
-  return next()
 })
 
 schema.plugin(paginate)

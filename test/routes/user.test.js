@@ -2,25 +2,21 @@ var chai = require('chai')
 var chaiHttp = require('chai-http')
 var app = require('../../main')
 var expect = require('chai').expect
-var mongoose = require('mongoose')
-var mockUsers = require('../mock/users')
+var fixtures = require('../fixtures/fixtures')
 
 chai.use(chaiHttp)
 
-function setUserFixtures (users) {
-  mongoose.models.User.find = (params, callback) => {
-    callback(null, users)
-  }
-}
+var models
 
-describe('Get users', () => {
-  beforeEach(function (done) {
-    mongoose.models.User.paginate = (params, options, callback) => {
-      callback(null, {'docs': [{'username': 'mark@firstcoders.co.uk', 'roles': ['ROLE_ADMIN'], 'id': '58cd112803e6c9000f5878ca'}], 'total': 1, 'limit': 20, 'offset': 0})
-    }
+beforeEach(function (done) {
+  models = fixtures.load((err, docs) => {
+    if (err) throw err
+    models = docs
     done()
   })
+})
 
+describe('Get users', () => {
   it('it should respond with a 401 if the user is unauthorized', (done) => {
     chai.request(app)
     .get('/users')
@@ -40,7 +36,7 @@ describe('Get users', () => {
     .end(function (err, res) {
       expect(err).to.be.null
       expect(res).to.have.status(200)
-      expect(res.body).to.be.instanceof(Object)
+      expect(res.body).to.be.instanceof(Array)
       expect(res.headers.link).not.to.be.undefined
       expect(res.headers.link).not.to.be.undefined
       expect(res.headers['x-total-count']).not.to.be.undefined
@@ -63,9 +59,8 @@ describe('Get users', () => {
 
 describe('Get single user', () => {
   it('it should respond with a 401 if the user is unauthorized', (done) => {
-    setUserFixtures([mockUsers.edmund, mockUsers.baldrick])
     chai.request(app)
-    .get('/users/' + mockUsers.edmund._id)
+    .get('/users/' + models[0]._id)
     .end(function (err, res) {
       expect(err).not.to.be.null
       expect(res).to.have.status(401)
@@ -75,9 +70,8 @@ describe('Get single user', () => {
   })
 
   it('it should respond with serialized users when logged in', (done) => {
-    setUserFixtures([mockUsers.edmund, mockUsers.baldrick])
     chai.request(app)
-    .get('/users/' + mockUsers.edmund._id)
+    .get('/users/' + models[0]._id)
     .set('X-AUTH-IDENTITY', '{ id: 1 }')
     .end(function (err, res) {
       expect(err).to.be.null
@@ -88,7 +82,6 @@ describe('Get single user', () => {
   })
 
   it('it should respond with a 404 when requesting with an unsupported accept header', (done) => {
-    setUserFixtures([mockUsers.edmund, mockUsers.baldrick])
     chai.request(app)
     .get('/users/edmundblackadder@home.nl')
     .set('X-AUTH-IDENTITY', '{ id: 1 }')
@@ -134,10 +127,6 @@ describe('Create user', () => {
   })
 
   it('it should respond with a 201 and the resource location if the user was created', (done) => {
-    mongoose.Collection.prototype.insert = function (docs, options, callback) {
-      callback(null, docs)
-    }
-
     chai.request(app)
     .post('/users')
     .set('X-AUTH-IDENTITY', '{ id: 1, username: \'\' }')

@@ -15,7 +15,12 @@ proxy.
 - JWT_SECRET=yourveryownsecret
 
 ## Test
-- npm run test
+The test suite contains integration tests and depends on a working mongodb instance.
+
+```
+docker run --name test-mongo -p 27017:27017 -d mongo:3.0
+docker run -e "DATABASE=mongodb://test-mongo:27017/test" -v $PWD:/usr/src/app -w /usr/src/app --link test-mongo:test-mongo node:7-alpine npm run test
+```
 
 # Todo
 - return cors headers

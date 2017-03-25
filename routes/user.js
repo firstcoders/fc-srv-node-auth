@@ -21,7 +21,7 @@ router.get('/', auth, function (req, res, next) {
       .header('X-total-count', result.total)
 
     if (req.accepts(['application/json', 'application/vnd.firstcoders.v1+json'])) {
-      res.json(result)
+      res.json(result.docs)
       return next()
     }
 

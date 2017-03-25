@@ -1,24 +1,19 @@
 var chai = require('chai')
 var chaiHttp = require('chai-http')
-var mongoose = require('mongoose')
-var mockUsers = require('../mock/users')
 var app = require('../../main')
 var expect = require('chai').expect
+var fixtures = require('../fixtures/fixtures')
 
 chai.use(chaiHttp)
 
-function mockUser (user) {
-  mongoose.models.User.findOne = (params, callback) => {
-    callback(null, user)
-  }
-}
-
-describe('Login using username and password', () => {
-  beforeEach(function (done) {
-    mockUser(mockUsers.edmund)
+beforeEach(function (done) {
+  fixtures.load((err, docs) => {
+    if (err) throw err
     done()
   })
+})
 
+describe('Login using username and password', () => {
   it('Should respond with a 400 and an error message if the user is not found', (done) => {
     chai.request(app)
     .post('/tokens')
@@ -46,6 +41,7 @@ describe('Login using username and password', () => {
   it('Should respond wth an encoded jwt token', (done) => {
     chai.request(app)
     .post('/tokens')
+    .set('Accept', 'application/json')
     .send({ username: 'edmundblackadder@home.nl', password: 'password' })
     .end(function (err, res) {
       expect(err).to.be.null
