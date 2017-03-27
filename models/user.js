@@ -18,7 +18,8 @@ var schema = new mongoose.Schema({
     type: String
   }],
   email: String,
-  resetToken: String,
+  resetPasswordToken: String,
+  resetPasswordExpires: Date,
   isActive: Boolean,
   failedLoginAttempts: Number
 }, {
@@ -32,7 +33,8 @@ schema.options.toJSON = {
     delete ret.__v
     delete ret.username
     delete ret.password
-    delete ret.resetToken
+    delete ret.resetPasswordToken
+    delete ret.resetPasswordExpires
     return ret
   }
 }
@@ -43,10 +45,10 @@ schema.pre('save', function (next) {
   if (user.isModified('password')) {
     encoder.encode(user.password).then(function (hash) {
       user.password = hash
-      return next()
+      next()
     })
   } else {
-    return next()
+    next()
   }
 })
 

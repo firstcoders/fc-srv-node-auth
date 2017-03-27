@@ -144,3 +144,44 @@ describe('Create user', () => {
     })
   })
 })
+
+describe('Delete a user', () => {
+  it('it should delete the user', (done) => {
+    chai.request(app)
+    .delete('/users/' + models[0]._id)
+    .set('X-AUTH-IDENTITY', '{ id: 1, username: \'\' }')
+    .end(function (err, res) {
+      expect(err).to.be.null
+      expect(res).to.have.status(204)
+      done()
+    })
+  })
+})
+
+describe('Forgot password', () => {
+  it('Should return a 400 if invalid data is sent', (done) => {
+    chai.request(app)
+    .patch('/users/' + models[0]._id)
+    .send({
+      password: 'fdfdfd'
+    })
+    .end(function (err, res) {
+      expect(err).not.to.be.null
+      expect(res).to.have.status(400)
+      done()
+    })
+  })
+
+  it('Unset the password should return a 204 when succesfull', (done) => {
+    chai.request(app)
+    .patch('/users/' + models[0]._id)
+    .send({
+      password: null
+    })
+    .end(function (err, res) {
+      expect(err).to.be.null
+      expect(res).to.have.status(204)
+      done()
+    })
+  })
+})

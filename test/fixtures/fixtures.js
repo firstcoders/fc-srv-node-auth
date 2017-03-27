@@ -1,11 +1,9 @@
 var User = require('../../models/user')
-var mongoose = require('mongoose')
-var async = require('async')
+var eachSeries = require('async/eachSeries')
 
 var fixtures = {
   clear: (done) => {
-    mongoose.connection.collections['users'].drop((err) => {
-      if (err) throw err
+    User.deleteMany({}, () => {
       done()
     })
   },
@@ -25,7 +23,7 @@ var fixtures = {
         roles: ['ROLE_ADMIN']
       })
 
-      async.eachSeries([edmund, baldrick], (user, asyncdone) => {
+      eachSeries([edmund, baldrick], (user, asyncdone) => {
         user.save(asyncdone)
       }, (err) => {
         if (err) throw err

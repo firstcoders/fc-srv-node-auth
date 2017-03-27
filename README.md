@@ -15,11 +15,40 @@ proxy.
 - JWT_SECRET=yourveryownsecret
 
 ## Test
-The test suite contains integration tests and depends on a working mongodb instance.
+The test suite contains integration tests and depends on a working mongodb instance and a working rabbitmq instance.
 
 ```
-docker run --name test-mongo -p 27017:27017 -d mongo:3.0
-docker run -e "DATABASE=mongodb://test-mongo:27017/test" -v $PWD:/usr/src/app -w /usr/src/app --link test-mongo:test-mongo node:7-alpine npm run test
+docker run \
+    --rm \
+    --name test-mongo \
+    -p 27017:27017 \
+    -d mongo
+
+docker run \
+    --rm \
+    --name test-rabbitmq \
+    -i \
+    -t \
+    -p 5671:5671 \
+    -p 5672:5672 \
+    -h test-rabbitmq \
+    -e RABBITMQ_DEFAULT_PASS=pass \
+    -e RABBITMQ_DEFAULT_USER=user \
+    -e RABBITMQ_DEFAULT_VHOST=vhost \
+    rabbitmq:alpine
+
+docker run \
+    --rm \
+    -i \
+    -t \
+    -e "DATABASE=mongodb://test-mongo:27017/test" \
+    -e "BROKER_URL=amqp://user:pass@test-rabbitmq:5672/vhost" \
+    -v $PWD:/usr/src/app \
+    -w /usr/src/app \
+    --link test-mongo:test-mongo \
+    --link test-rabbitmq:test-rabbitmq \
+    node:7-alpine \
+    npm run test
 ```
 
 # Todo

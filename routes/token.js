@@ -48,8 +48,8 @@ router.post('/', function (req, res, next) {
             }
           }
         })
-        .catch(function (error) {
-          console.log(error)
+        .catch(function (err) {
+          if (err) throw err
         })
     }
   })
