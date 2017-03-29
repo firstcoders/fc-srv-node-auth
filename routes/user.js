@@ -65,6 +65,7 @@ router.post('/', auth, (req, res, next) => {
 // Edit a user
 // =======================
 router.put('/:username', auth, (req, res, next) => {
+  // @todo input validation + disallow reset password
   User.findOneAndUpdate(
     { username: req.params.username },
     req.body,
@@ -110,6 +111,8 @@ router.patch('/:id', (req, res, next) => {
           .send()
       })
     } else {
+      // @todo validate token + reset password
+
       res
         .status(400)
         .send()

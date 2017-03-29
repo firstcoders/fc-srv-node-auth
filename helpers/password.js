@@ -1,6 +1,6 @@
 var crypto = require('crypto')
 var waterfall = require('async/waterfall')
-var producer = require('../helpers/producer')(process.env.BROKER_URL, process.env.MAIL_QUEUE || 'mail.send')
+var producer = require('../helpers/producer')(process.env.BROKER_URL, process.env.MAIL_QUEUE || 'v1.mail.send')
 
 module.exports = {
   forgot: (user, finalize) => {
@@ -12,8 +12,7 @@ module.exports = {
         })
       },
       (token, done) => {
-        user.resetPasswordToken = token
-        user.resetPasswordExpires = Date.now() + 3600000
+        user.resetPasswordToken = token + '.' + (Date.now() + 3600000)
 
         user.save((err) => {
           done(err, token, user)
@@ -22,7 +21,8 @@ module.exports = {
       (token, user, done) => {
         var message = {
           context: 'auth.forgot_password',
-          user: user.toJSON()
+          user: user.toJSON(),
+          token: token
         }
 
         producer.send(JSON.stringify(message), () => {

@@ -19,9 +19,9 @@ var schema = new mongoose.Schema({
   }],
   email: String,
   resetPasswordToken: String,
-  resetPasswordExpires: Date,
   isActive: Boolean,
-  failedLoginAttempts: Number
+  failedLoginAttempts: Number,
+  isLocked: Boolean
 }, {
   timestamps: true
 })
